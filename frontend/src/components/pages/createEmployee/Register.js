@@ -10,12 +10,70 @@ import {
   Box,
 } from "@material-ui/core";
 import LockIcon from "@material-ui/icons/Lock";
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 
 import Copyright from "./Copyright";
 import useStyles from "./register.styles";
+import { signupUrl } from "../../apis";
 
-const Register = () => {
+const Register = ({ setAuth }) => {
+  const [inputs, setInputs] = useState({
+    username: "",
+    firstname: "",
+    lastname: "",
+    gender: "",
+    jobrole: "",
+    department: "",
+    email: "",
+    password: "",
+    address: "",
+  });
+
+  const {
+    username,
+    firstname,
+    lastname,
+    gender,
+    jobrole,
+    department,
+    email,
+    password,
+    address,
+  } = inputs;
+
+  const onChange = (e) => {
+    setInputs({ ...inputs, [e.target.name]: e.target.value });
+  };
+
+  const onSubmitForm = async (e) => {
+    e.preventDefault();
+    try {
+      const body = {
+        username,
+        firstname,
+        lastname,
+        gender,
+        jobrole,
+        department,
+        email,
+        password,
+        address,
+      };
+      const register = await fetch(signupUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      const registerResult = await register.json();
+
+      localStorage.setItem("token", registerResult.data.token);
+      setAuth(true);
+      console.log("R2", registerResult);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   const classes = useStyles();
   return (
     <Fragment>
@@ -28,42 +86,48 @@ const Register = () => {
           <Typography className={classes.title} variant="h5">
             Register Employee
           </Typography>
-          <form className={classes.form} noValidate>
+          <form onSubmit={onSubmitForm} className={classes.form} noValidate>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
                   autoComplete="uname"
-                  name="userName"
+                  name="username"
                   variant="outlined"
                   required
                   fullWidth
-                  id="userName"
+                  id="username"
                   label="Username"
                   autoFocus
+                  value={username}
+                  onChange={(e) => onChange(e)}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
                   autoComplete="fname"
-                  name="firstName"
+                  name="firstname"
                   variant="outlined"
                   required
                   fullWidth
-                  id="firstName"
+                  id="firstname"
                   label="Firstname"
                   autoFocus
+                  value={firstname}
+                  onChange={(e) => onChange(e)}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
                   autoComplete="lname"
-                  name="lastName"
+                  name="lastname"
                   variant="outlined"
                   required
                   fullWidth
-                  id="lastName"
+                  id="lastname"
                   label="Lastname"
                   autoFocus
+                  value={lastname}
+                  onChange={(e) => onChange(e)}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -76,6 +140,8 @@ const Register = () => {
                   id="gender"
                   label="Gender"
                   autoFocus
+                  value={gender}
+                  onChange={(e) => onChange(e)}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -88,6 +154,8 @@ const Register = () => {
                   id="jobrole"
                   label="Jobrole"
                   autoFocus
+                  value={jobrole}
+                  onChange={(e) => onChange(e)}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -100,6 +168,8 @@ const Register = () => {
                   id="department"
                   label="Department"
                   autoFocus
+                  value={department}
+                  onChange={(e) => onChange(e)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -111,6 +181,8 @@ const Register = () => {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  value={email}
+                  onChange={(e) => onChange(e)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -123,6 +195,8 @@ const Register = () => {
                   type="password"
                   id="password"
                   autoComplete="current-password"
+                  value={password}
+                  onChange={(e) => onChange(e)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -135,6 +209,8 @@ const Register = () => {
                   type="address"
                   id="address"
                   autoComplete="current-password"
+                  value={address}
+                  onChange={(e) => onChange(e)}
                 />
               </Grid>
             </Grid>
