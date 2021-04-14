@@ -2,8 +2,7 @@ import React, { Fragment, useState } from "react";
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  Redirect,
+  Route
 } from "react-router-dom";
 import {
   Typography,
@@ -18,14 +17,11 @@ import Register from "../pages/createEmployee/Register";
 import Dashboard from "../pages/dashboard/Dashboard";
 
 const Header = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  // const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const setAuth = boolean => {
-    setIsAuthenticated(boolean);
-  };
-
-
-
+  // const setAuth = (boolean) => {
+  //   setIsAuthenticated(boolean);
+  // };
 
   return (
     <Fragment>
@@ -42,38 +38,12 @@ const Header = () => {
           <div>
             <Container>
               <Switch>
-                <Route
-                  exact
-                  path="/login"
-                  render={(props) =>
-                    !isAuthenticated ? (
-                      <Login {...props} setAuth={setAuth} />
-                    ) : (
-                      <Redirect to="/dashboard" />
-                    )
-                  }
-                />
-                <Route
-                  exact
-                  path="/register"
-                  render={(props) =>
-                    !isAuthenticated ? (
-                      <Register {...props} setAuth={setAuth} />
-                    ) : (
-                      <Redirect to="/login" />
-                    )
-                  }
-                />
+                <Route exact path="/" component={Login} />
+                <Route path="/login" component={Login} />
                 <Route
                   exact
                   path="/dashboard"
-                  render={(props) =>
-                    isAuthenticated ? (
-                      <Dashboard {...props} setAuth={setAuth} />
-                    ) : (
-                      <Redirect to="/login" />
-                    )
-                  }
+                  render={(props) => <Dashboard {...props} />}
                 />
               </Switch>
             </Container>

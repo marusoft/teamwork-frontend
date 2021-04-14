@@ -11,12 +11,16 @@ import {
 } from "@material-ui/core";
 import LockIcon from "@material-ui/icons/Lock";
 import React, { Fragment, useState } from "react";
+import { Redirect, useHistory } from "react-router-dom";
 
 import Copyright from "../createEmployee/Copyright";
 import useStyles from "./login.styles";
 import { signinUrl } from "../../apis";
+import { saveUser, loggedIn } from "../../auth";
 
-const Login = ({ setAuth }) => {
+const Login = () => {
+  const history = useHistory();
+
   const [inputs, setInputs] = useState({
     email: "",
     password: "",
@@ -37,14 +41,21 @@ const Login = ({ setAuth }) => {
       };
       const login = await fetch(signinUrl, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-type": "application/json" },
         body: JSON.stringify(body),
       });
       const loginResult = await login.json();
+      console.log("4", loginResult.data)
+      if (loginResult.error) {
+        return loginResult.error;
 
-      localStorage.setItem("token", loginResult.data.token);
-      setAuth(true);
-      console.log("R2", loginResult);
+      } else {
+        saveUser(loginResult);
+        history.push("/dashboard");
+      }
+      // localStorage.setItem("token", loginResult.data.token);
+      // setAuth(true);
+      console.log("1", loginResult);
     } catch (error) {
       console.log(error.message);
     }
@@ -53,6 +64,7 @@ const Login = ({ setAuth }) => {
   const classes = useStyles();
   return (
     <Fragment>
+      {loggedIn() === true ? <Redirect to="/dashboard" /> : null}
       <Container maxWidth="xs">
         <CssBaseline />
         <div className={classes.login}>
