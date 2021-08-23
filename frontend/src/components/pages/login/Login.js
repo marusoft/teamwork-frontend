@@ -12,6 +12,8 @@ import {
 import LockIcon from "@material-ui/icons/Lock";
 import React, { Fragment, useState } from "react";
 import { Redirect, useHistory } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import Copyright from "../createEmployee/Copyright";
 import useStyles from "./login.styles";
@@ -45,17 +47,15 @@ const Login = () => {
         body: JSON.stringify(body),
       });
       const loginResult = await login.json();
-      console.log("4", loginResult.data)
-      if (loginResult.error) {
-        return loginResult.error;
-
+      console.log('logindata', loginResult)
+      const { error } = loginResult;
+      if (error) {
+        toast.error(error);
       } else {
         saveUser(loginResult);
+        toast.success("Register Successfully");
         history.push("/dashboard");
       }
-      // localStorage.setItem("token", loginResult.data.token);
-      // setAuth(true);
-      console.log("1", loginResult);
     } catch (error) {
       console.log(error.message);
     }
@@ -64,6 +64,7 @@ const Login = () => {
   const classes = useStyles();
   return (
     <Fragment>
+      <ToastContainer />
       {loggedIn() === true ? <Redirect to="/dashboard" /> : null}
       <Container maxWidth="xs">
         <CssBaseline />

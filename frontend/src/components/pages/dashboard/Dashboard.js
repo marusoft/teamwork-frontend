@@ -4,7 +4,11 @@ import { useHistory } from "react-router-dom"
 
 import useStyles from "../../../styles";
 import { loggedInUrl } from "../../apis";
-import { getToken } from "../../auth"
+import { getToken } from "../../auth";
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const Dashboard = () => {
   const history = useHistory();
@@ -20,10 +24,10 @@ const Dashboard = () => {
         method: "GET",
         headers: { "Authorization": token },
       });
-      console.log("2", loggedInUser)
       const loggedUserResult = await loggedInUser.json();
-      console.log("3", loggedUserResult)
-      setName(loggedUserResult.data.username);
+      const { username } = loggedUserResult.data;
+      setName(username);
+      toast.success("Welcome back your login was successful")
     } catch (error) {
       console.log(error.message);
     }
@@ -43,6 +47,7 @@ const Dashboard = () => {
   const classes = useStyles();
   return (
     <Fragment>
+       <ToastContainer />
       <CssBaseline />
       <div className={classes.dashboard}>
         <Typography variant="h2">hello Dashboard</Typography>

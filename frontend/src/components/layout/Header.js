@@ -40,6 +40,7 @@ const Header = () => {
               <Switch>
                 <Route exact path="/" component={Login} />
                 <Route path="/login" component={Login} />
+                <Route path="/register" component={Register} />
                 <Route
                   exact
                   path="/dashboard"

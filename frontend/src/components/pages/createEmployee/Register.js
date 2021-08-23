@@ -88,7 +88,7 @@ const Register = ({ setAuth }) => {
           </Typography>
           <form onSubmit={onSubmitForm} className={classes.form} noValidate>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12}>
                 <TextField
                   autoComplete="uname"
                   name="username"
